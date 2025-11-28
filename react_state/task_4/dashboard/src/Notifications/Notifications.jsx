@@ -8,14 +8,14 @@ class Notifications extends PureComponent {
   }
 
   render() {
-    const { displayDrawer, listNotifications, handleDisplayDrawer, handleHideDrawer, markNotificationAsRead } = this.props;
+    const { displayDrawer, notifications, handleDisplayDrawer, handleHideDrawer, markNotificationAsRead } = this.props;
 
     const borderStyle = {
       borderColor: 'var(--main-color)',
     };
 
     const menuItemClass = `menuItem fixed top-2 right-2 p-2 cursor-pointer bg-white z-40 md:static md:text-right md:p-2.5 ${
-      listNotifications.length > 0 && !displayDrawer ? 'animate-bounce' : ''
+      notifications.length > 0 && !displayDrawer ? 'animate-bounce' : ''
     }`;
 
     return (
@@ -36,13 +36,13 @@ class Notifications extends PureComponent {
             >
               ×
             </button>
-            {listNotifications.length === 0 ? (
+            {notifications.length === 0 ? (
               <p className="m-0 mt-8">No new notification for now</p>
             ) : (
               <>
                 <p className="m-0 mb-2.5 mt-8 md:mt-0">Here is the list of notifications</p>
                 <ul className="list-none p-0 m-0 mt-2.5 md:list-inside">
-                  {listNotifications.map((notification) => (
+                  {notifications.map((notification) => (
                     <NotificationItem
                       key={notification.id}
                       id={notification.id}
@@ -66,7 +66,7 @@ Notifications.propTypes = {
   displayDrawer: PropTypes.bool,
   handleDisplayDrawer: PropTypes.func,
   handleHideDrawer: PropTypes.func,
-  listNotifications: PropTypes.arrayOf(
+  notifications: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       type: PropTypes.string.isRequired,
@@ -83,7 +83,7 @@ Notifications.defaultProps = {
   displayDrawer: false,
   handleDisplayDrawer: () => {},
   handleHideDrawer: () => {},
-  listNotifications: [],
+  notifications: [],
   markNotificationAsRead: () => {},
 };
 

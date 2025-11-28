@@ -30,18 +30,18 @@ describe('Notifications component', () => {
 
   describe('when displayDrawer is false', () => {
     test('does not display the close button', () => {
-      const { container } = render(<Notifications displayDrawer={false} listNotifications={notificationsList} />);
+      const { container } = render(<Notifications displayDrawer={false} notifications={notificationsList} />);
       const button = container.querySelector('button[aria-label="Close"]');
       expect(button).not.toBeInTheDocument();
     });
 
     test('does not display "Here is the list of notifications"', () => {
-      render(<Notifications displayDrawer={false} listNotifications={notificationsList} />);
+      render(<Notifications displayDrawer={false} notifications={notificationsList} />);
       expect(screen.queryByText('Here is the list of notifications')).not.toBeInTheDocument();
     });
 
     test('does not display notification items', () => {
-      const { container } = render(<Notifications displayDrawer={false} listNotifications={notificationsList} />);
+      const { container } = render(<Notifications displayDrawer={false} notifications={notificationsList} />);
       const listItems = container.querySelectorAll('li');
       expect(listItems).toHaveLength(0);
     });
@@ -49,31 +49,31 @@ describe('Notifications component', () => {
 
   describe('when displayDrawer is true', () => {
     test('displays the close button', () => {
-      const { container } = render(<Notifications displayDrawer={true} listNotifications={notificationsList} />);
+      const { container } = render(<Notifications displayDrawer={true} notifications={notificationsList} />);
       const button = container.querySelector('button[aria-label="Close"]');
       expect(button).toBeInTheDocument();
     });
 
     test('displays "Here is the list of notifications"', () => {
-      render(<Notifications displayDrawer={true} listNotifications={notificationsList} />);
+      render(<Notifications displayDrawer={true} notifications={notificationsList} />);
       expect(screen.getByText('Here is the list of notifications')).toBeInTheDocument();
     });
 
     test('displays notification items', () => {
-      const { container } = render(<Notifications displayDrawer={true} listNotifications={notificationsList} />);
+      const { container } = render(<Notifications displayDrawer={true} notifications={notificationsList} />);
       const listItems = container.querySelectorAll('li');
       expect(listItems).toHaveLength(3);
     });
   });
 
-  describe('when displayDrawer is true and listNotifications is empty', () => {
+  describe('when displayDrawer is true and notifications is empty', () => {
     test('displays "No new notification for now"', () => {
-      render(<Notifications displayDrawer={true} listNotifications={[]} />);
+      render(<Notifications displayDrawer={true} notifications={[]} />);
       expect(screen.getByText('No new notification for now')).toBeInTheDocument();
     });
 
     test('does not display "Here is the list of notifications"', () => {
-      render(<Notifications displayDrawer={true} listNotifications={[]} />);
+      render(<Notifications displayDrawer={true} notifications={[]} />);
       expect(screen.queryByText('Here is the list of notifications')).not.toBeInTheDocument();
     });
   });
@@ -84,7 +84,7 @@ describe('Notifications component', () => {
     const { container } = render(
       <Notifications 
         displayDrawer={true} 
-        listNotifications={notificationsList} 
+        notifications={notificationsList} 
         markNotificationAsRead={markNotificationAsReadMock}
       />
     );
@@ -119,7 +119,7 @@ describe('Notifications component', () => {
 
   test('does not re-render when updating with the same list', () => {
     const { rerender, container } = render(
-      <Notifications displayDrawer={true} listNotifications={notificationsList} />
+      <Notifications displayDrawer={true} notifications={notificationsList} />
     );
 
     const initialListItems = container.querySelectorAll('li');
@@ -132,7 +132,7 @@ describe('Notifications component', () => {
       { id: 3, type: 'urgent', html: { __html: '<strong>Urgent requirement</strong> - complete by EOD' } },
     ];
 
-    rerender(<Notifications displayDrawer={true} listNotifications={sameNotifications} />);
+    rerender(<Notifications displayDrawer={true} notifications={sameNotifications} />);
 
     const updatedListItems = container.querySelectorAll('li');
     expect(updatedListItems).toHaveLength(3);
@@ -140,7 +140,7 @@ describe('Notifications component', () => {
 
   test('re-renders when updating with a longer list', () => {
     const { rerender, container } = render(
-      <Notifications displayDrawer={true} listNotifications={notificationsList} />
+      <Notifications displayDrawer={true} notifications={notificationsList} />
     );
 
     const initialListItems = container.querySelectorAll('li');
@@ -152,7 +152,7 @@ describe('Notifications component', () => {
       { id: 4, type: 'default', value: 'New notification' },
     ];
 
-    rerender(<Notifications displayDrawer={true} listNotifications={longerNotifications} />);
+    rerender(<Notifications displayDrawer={true} notifications={longerNotifications} />);
 
     const updatedListItems = container.querySelectorAll('li');
     expect(updatedListItems).toHaveLength(4);

@@ -26,7 +26,7 @@ class App extends Component {
       displayDrawer: false,
       user: user,
       logOut: this.logOut,
-      listNotifications: [
+      notifications: [
         { id: 1, type: 'default', value: 'New course available' },
         { id: 2, type: 'urgent', value: 'New resume available' },
         { id: 3, type: 'urgent', html: { __html: '<strong>Urgent requirement</strong> - complete by EOD' } },
@@ -77,12 +77,12 @@ class App extends Component {
   markNotificationAsRead(id) {
     console.log(`Notification ${id} has been marked as read`);
     this.setState({
-      listNotifications: this.state.listNotifications.filter((notification) => notification.id !== id),
+      notifications: this.state.notifications.filter((notification) => notification.id !== id),
     });
   }
 
   render() {
-    const { displayDrawer, user, listNotifications } = this.state;
+    const { displayDrawer, user, notifications } = this.state;
 
     const coursesList = [
       { id: 1, name: 'ES6', credit: 60 },
@@ -96,7 +96,7 @@ class App extends Component {
           <div className="App relative min-h-screen flex flex-col font-sans">
             <div className="flex justify-between items-center flex-row-reverse md:flex-row">
               <Notifications 
-                listNotifications={listNotifications} 
+                notifications={notifications} 
                 displayDrawer={displayDrawer}
                 handleDisplayDrawer={this.handleDisplayDrawer}
                 handleHideDrawer={this.handleHideDrawer}
