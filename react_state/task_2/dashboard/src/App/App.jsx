@@ -104,7 +104,7 @@ class App extends Component {
                 </BodySectionWithMarginBottom>
               ) : (
                 <BodySectionWithMarginBottom title="Log in to continue">
-                  <LoginWithLogging logIn={this.logIn} />
+                  <LoginWithLogging logIn={this.logIn} email={user.email} password={user.password} />
                 </BodySectionWithMarginBottom>
               )}
               

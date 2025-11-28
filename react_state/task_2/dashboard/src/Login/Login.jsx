@@ -5,8 +5,8 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
+      email: props.email,
+      password: props.password,
       enableSubmit: false,
     };
     this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
@@ -87,10 +87,14 @@ class Login extends Component {
 
 Login.propTypes = {
   logIn: PropTypes.func,
+  email: PropTypes.string,
+  password: PropTypes.string,
 };
 
 Login.defaultProps = {
   logIn: () => {},
+  email: '',
+  password: '',
 };
 
 export default Login;
