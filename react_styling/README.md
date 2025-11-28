@@ -1,14 +1,5 @@
 # React styling
 
-## Curriculum
-[C#23] Full Stack - Alternance France C#23
-Average: 24.66%
-
-## Project badge
-React styling
-Amateur
-By: Johann Kerbrat, Engineering Manager at Uber Works
-Weight: 1
 
 ## Description
 Resources
