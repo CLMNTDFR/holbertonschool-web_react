@@ -30,24 +30,11 @@ afterEach(() => {
 import React, { useCallback, useState } from 'react';
 import { act, render, fireEvent, renderHook, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import rootReducer from '../app/rootReducer';
-import { store } from '../app/store';
 import App from "../App";
 import { getLatestNotification } from '../utils/utils';
 import mockAxios from 'jest-mock-axios';
 
 jest.mock('axios', () => require('jest-mock-axios').default);
-
-const TestWrapper = ({ children }) => {
-    const testStore = configureStore({ reducer: rootReducer });
-    return (
-        <Provider store={testStore}>
-            {children}
-        </Provider>
-    );
-};
 
 const mockBodySection = jest.fn();
 jest.mock("../components/BodySection/BodySection", () => {
@@ -72,22 +59,22 @@ test('Should confirm App is a function component', () => {
 });
 
 test('Should add the title of "Log in to continue" above the Login component when the isLoggedIn prop set to false', () => {
-    render(<TestWrapper><App /></TestWrapper>)
+    render(<App isLoggedIn={false} />)
     expect(screen.getByRole('heading', { name: /log in to continue/i })).toBeInTheDocument();
 });
 
 test('Should render BodySection as a child component', () => {
-    render(<TestWrapper><App /></TestWrapper>);
+    render(<App isLoggedIn={false} />);
     expect(mockBodySection).toHaveBeenCalled();
 });
 
 test('Should render BodySection with news when logged in', () => {
-    render(<TestWrapper><App /></TestWrapper>);
+    render(<App isLoggedIn={true} />);
     expect(mockBodySection).toHaveBeenCalled();
 });
 
 test('Should render a heading element with a text "", and a paragraph with text ""', () => {
-    render(<TestWrapper><App /></TestWrapper>)
+    render(<App />)
     expect(screen.getByRole('heading', { name: /news from the school/i })).toBeInTheDocument();
     expect(screen.getByText(/holberton school news goes here/i)).toBeInTheDocument()
 });
@@ -102,7 +89,7 @@ describe('Test HOC log mount and unmount "Login" and "CourseList" components', (
     });
 
     test('Logs when CourseList is mounted and unmounted based on "isLoggedIn" prop value, and handles nameless components', async () => {
-        const { rerender, unmount, container } = render(<TestWrapper><App /></TestWrapper>);
+        const { rerender, unmount, container } = render(<App />);
         expect(screen.getByText(/login to access the full dashboard/i)).toBeInTheDocument();
         const emailInput = screen.getByLabelText(/email/i);
         const passwordInput = screen.getByLabelText(/password/i);
@@ -128,9 +115,9 @@ describe('Test HOC log mount and unmount "Login" and "CourseList" components', (
     });
 
     test('Logs when Login is mounted and unmounted based on "isLoggedIn" prop value, and handles nameless components', () => {
-        const { unmount } = render(<TestWrapper><App /></TestWrapper>);
+        const { unmount } = render(<App />);
         expect(console.log).toHaveBeenCalledWith(expect.stringMatching(/Component (Login|Component) is mounted/));
-        render(<TestWrapper><App /></TestWrapper>);
+        render(<App />);
         expect(console.log).toHaveBeenCalledWith(expect.stringMatching(/Component (Login|Component) is mounted/));
         unmount();
         expect(console.log).toHaveBeenCalledWith(expect.stringMatching(/Component (Login|Component) is going to unmount/));
@@ -141,7 +128,7 @@ describe('Test HOC log mount and unmount "Login" and "CourseList" components', (
 })
 
 test('Should display CourseList and welcome message after login and hide them after logout', async () => {
-    render(<TestWrapper><App /></TestWrapper>);
+    render(<App />);
     expect(screen.getByText('Log in to continue')).toBeInTheDocument();
     const emailInput = screen.getByRole('textbox', { name: /email/i });
     const passwordInput = screen.getByLabelText(/password/i);
@@ -164,7 +151,7 @@ test('Should display CourseList and welcome message after login and hide them af
 });
 
 test('Should handle login with valid email and password', async () => {
-    render(<TestWrapper><App /></TestWrapper>);
+    render(<App />);
     const emailInput = screen.getByRole('textbox', { name: /email/i });
     const passwordInput = screen.getByLabelText(/password/i);
     const submitButton = screen.getByRole('button', { name: /ok/i });
@@ -181,7 +168,7 @@ test('Should handle login with valid email and password', async () => {
 });
 
 test('Should render login page when the user is not logged in and handle login flow correctly', async () => {
-    render(<TestWrapper><App /></TestWrapper>);
+    render(<App />);
     expect(screen.getByText('Log in to continue')).toBeInTheDocument();
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -202,7 +189,7 @@ test('Should render login page when the user is not logged in and handle login f
 });
 
 test('logIn updates user state and renders CourseList', () => {
-    render(<TestWrapper><App /></TestWrapper>);
+    render(<App />);
     expect(screen.getByText(/log in to continue/i)).toBeInTheDocument();
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -215,7 +202,7 @@ test('logIn updates user state and renders CourseList', () => {
 
 test('logOut function should clears user state and renders Login form', async () => {
     const user = userEvent.setup();
-    const { container } = render(<TestWrapper><App /></TestWrapper>);
+    const { container } = render(<App />);
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
     const submitButton = screen.getByRole('button', { name: /ok/i });
@@ -255,7 +242,7 @@ describe('App Component Tests', () => {
     test('Verify notification item deletion', async () => {
         const user = userEvent.setup();
         mockAxios.get.mockImplementationOnce(() => Promise.resolve(mockNotificationsResponse));
-        render(<TestWrapper><App /></TestWrapper>);
+        render(<App />);
         await waitFor(() => {
             const listItems = screen.getAllByRole('listitem');
             expect(listItems).toHaveLength(3);
@@ -307,7 +294,7 @@ describe('App component when user is logged in', () => {
                 return Promise.resolve(mockCoursesResponse);
             }
         });
-        render(<TestWrapper><App /></TestWrapper>);
+        render(<App />);
         const emailInput = screen.getByLabelText(/email/i);
         const passwordInput = screen.getByLabelText(/password/i);
         const submitButton = screen.getByRole('button', { name: /ok/i });
@@ -351,7 +338,7 @@ describe('App Component State Management', () => {
         test('DisplayDrawer state management and notification visibility', async () => {
             const user = userEvent.setup();
             mockAxios.get.mockResolvedValueOnce(mockNotificationsResponse);
-            render(<TestWrapper><App /></TestWrapper>);
+            render(<App />);
             await waitFor(() => {
                 expect(screen.getByText(/here is the list of notifications/i)).toBeVisible();
             });
@@ -368,7 +355,7 @@ describe('App Component State Management', () => {
         test('displayDrawer keyboard interactions', async () => {
             const user = userEvent.setup();
             mockAxios.get.mockResolvedValueOnce(mockNotificationsResponse);
-            render(<TestWrapper><App /></TestWrapper>);
+            render(<App />);
             await waitFor(() => {
                 expect(screen.getByText(/here is the list of notifications/i)).toBeVisible();
             });
@@ -381,7 +368,7 @@ describe('App Component State Management', () => {
         test('Should remove notification items once click on it', async () => {
             const user = userEvent.setup();
             mockAxios.get.mockResolvedValueOnce(mockNotificationsResponse);
-            render(<TestWrapper><App /></TestWrapper>);
+            render(<App />);
             await waitFor(() => {
                 expect(screen.getAllByRole('listitem')).toHaveLength(3);
             });
@@ -406,7 +393,7 @@ describe('App Component State Management', () => {
                 }
                 return Promise.reject(new Error('Invalid URL'));
             });
-            render(<TestWrapper><App /></TestWrapper>);
+            render(<App />);
             await waitFor(() => {
                 expect(screen.getByRole('heading', { name: /log in to continue/i })).toBeInTheDocument();
             });
@@ -447,7 +434,7 @@ describe('App Component State Management', () => {
         test('Notifications state management and interactions', async () => {
             const user = userEvent.setup();
             mockAxios.get.mockResolvedValueOnce(mockNotificationsResponse);
-            render(<TestWrapper><App /></TestWrapper>);
+            render(<App />);
             await waitFor(() => {
                 expect(screen.getByText('New course available')).toBeInTheDocument();
                 expect(screen.getByText('New resume available')).toBeInTheDocument();
@@ -461,7 +448,7 @@ describe('App Component State Management', () => {
 
         test('Notifications priority and ordering', async () => {
             mockAxios.get.mockResolvedValueOnce(mockNotificationsResponse);
-            render(<TestWrapper><App /></TestWrapper>);
+            render(<App />);
             await waitFor(() => {
                 const notifications = screen.getAllByRole('listitem');
                 const urgentNotifications = notifications.filter(notification =>
@@ -627,7 +614,7 @@ describe('App Component Tests', () => {
     test('Verify notification item deletion', async () => {
         const user = userEvent.setup();
         mockAxios.get.mockImplementationOnce(() => Promise.resolve(mockNotificationsResponse));
-        render(<TestWrapper><App /></TestWrapper>);
+        render(<App />);
         await waitFor(async () => {
             await expect(screen.getByText(/here is the list of notifications/i)).toBeInTheDocument();
             const listItems = screen.getAllByRole('listitem');
@@ -682,7 +669,7 @@ describe('App Component Performance with useCallback', () => {
     });
 
     test('HandleDisplayDrawer should maintain referential equality', async () => {
-        const { rerender } = render(<TestWrapper><App /></TestWrapper>);
+        const { rerender } = render(<App />);
         await waitFor(() => {
             expect(screen.getByText('School Dashboard')).toBeInTheDocument();
         });
@@ -695,7 +682,7 @@ describe('App Component Performance with useCallback', () => {
             throw new Error('handleDisplayDrawer is not using useCallback');
         }
         const initialHandler = displayDrawerCall[0];
-        await act(async () => rerender(<TestWrapper><App /></TestWrapper>));
+        await act(async () => rerender(<App />));
         await waitFor(() => {
             expect(screen.getByText('School Dashboard')).toBeInTheDocument();
         });
@@ -708,7 +695,7 @@ describe('App Component Performance with useCallback', () => {
     });
 
     test('HandleHideDrawer should maintain referential equality', async () => {
-        const { rerender } = render(<TestWrapper><App /></TestWrapper>);
+        const { rerender } = render(<App />);
         await waitFor(() => {
             expect(screen.getByText('School Dashboard')).toBeInTheDocument();
         });
@@ -721,7 +708,7 @@ describe('App Component Performance with useCallback', () => {
             throw new Error('handleDisplayDrawer is not using useCallback');
         }
         const initialHandler = hideDrawerCall[0];
-        await act(async () => rerender(<TestWrapper><App /></TestWrapper>));
+        await act(async () => rerender(<App />));
         await waitFor(() => {
             expect(screen.getByText('School Dashboard')).toBeInTheDocument();
         });
@@ -735,7 +722,7 @@ describe('App Component Performance with useCallback', () => {
 
     test('MarkNotificationAsRead should maintain referential equality', async () => {
         const useCallbackSpy = jest.spyOn(React, 'useCallback');
-        const { rerender } = render(<TestWrapper><App /></TestWrapper>);
+        const { rerender } = render(<App />);
         const initialCalls = useCallbackSpy.mock.calls;
         const markAsReadCall = initialCalls.find((call) => {
             const functionString = call[0].toString();
@@ -745,7 +732,7 @@ describe('App Component Performance with useCallback', () => {
             throw new Error('markNotificationAsRead is not using useCallback');
         }
         const initialHandler = markAsReadCall[0];
-        await act(async () => rerender(<TestWrapper><App /></TestWrapper>));
+        await act(async () => rerender(<App />));
         const laterCalls = useCallbackSpy.mock.calls;
         const laterMarkAsReadCall = laterCalls.find((call) => {
             const functionString = call[0].toString();
@@ -757,7 +744,7 @@ describe('App Component Performance with useCallback', () => {
     test('Handlers should maintain functionality', async () => {
         const user = userEvent.setup()
         mockAxios.get.mockImplementationOnce(() => Promise.resolve(mockNotificationsResponse));
-        render(<TestWrapper><App /></TestWrapper>);
+        render(<App />);
         await waitFor(async () => {
             await expect(screen.getByText(/here is the list of notifications/i)).toBeInTheDocument();
             const listItems = screen.getAllByRole('listitem');
