@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/main.9abcfd83.css","mappings":"AAAA,KACE,iBACF,CAEA,YACE,wBAAyB,CAEzB,UAAY,CADZ,YAEF,CAEA,eACE,QACF","sources":["App.css"],"sourcesContent":[".App {\n  text-align: center;\n}\n\n.App-header {\n  background-color: #282c34;\n  padding: 20px;\n  color: white;\n}\n\n.App-header h1 {\n  margin: 0;\n}"],"names":[],"ignoreList":[],"sourceRoot":""}
