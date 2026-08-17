@@ -14,6 +14,7 @@ Webpack bundles the tasks. Jest 24.9 checks the scripts. Tablet and mobile do no
 ## Tasks
 
 0. Creating an interface for a student: render a table of first names and locations.
+1. Let's build a Teacher interface: readonly names, optional experience, extra props.
 
 ## Author
 
