@@ -22,6 +22,7 @@ Webpack bundles the tasks. Jest 24.9 checks the scripts. Tablet and mobile do no
 6. Creating functions specific to employees: isDirector predicate and executeWork.
 7. String literal types: teachClass for Math or History.
 8. Ambient Namespaces: CRUD types for insert, update and delete.
+9. Namespace & Declaration merging: Subjects, Teacher, Cpp, Java, React.
 
 ## Author
 
