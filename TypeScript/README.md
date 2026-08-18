@@ -18,6 +18,7 @@ Webpack bundles the tasks. Jest 24.9 checks the scripts. Tablet and mobile do no
 2. Extending the Teacher class: Directors adds numberOfReports.
 3. Printing teachers: printTeacher returns "J. Doe".
 4. Writing a class: StudentClass with workOnHomework and displayName.
+5. Advanced types Part 1: Director, Teacher, and createEmployee.
 
 ## Author
 
