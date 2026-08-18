@@ -20,6 +20,7 @@ Webpack bundles the tasks. Jest 24.9 checks the scripts. Tablet and mobile do no
 4. Writing a class: StudentClass with workOnHomework and displayName.
 5. Advanced types Part 1: Director, Teacher, and createEmployee.
 6. Creating functions specific to employees: isDirector predicate and executeWork.
+7. String literal types: teachClass for Math or History.
 
 ## Author
 
